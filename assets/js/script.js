@@ -10,28 +10,25 @@ if(!events) {
 }
 
 function auditEvents() {
-    console.log("hi");
+    console.log("test");
 };
 
 function loadEvents() {
     for(var i = 0; i < events.length; i++) {
-        var eventId = JSON.parse($("i").attr("id")) + i;
-        console.log(eventId);
-    }
+        var eventId = JSON.parse($(".row").attr("id")) + i;
+
+        // prints events to corresponding time block
+        $("div#" + eventId).find("textarea").text(events[i]);
+    };
 };
 
 $("i").on("click", function() {
     var eventDescription = $(this).parents(".row").find("textarea").val();
-    
-    events.splice($(this).attr("id"), 1, eventDescription);
+
+    // insert event in corresponding index in events array
+    events.splice($(this).parents(".row").attr("id"), 1, eventDescription);
     localStorage.setItem("saved events", JSON.stringify(events));
 })
-
-// $("textarea").each(function() {
-//     var i = 0;
-//     $(this).text(events[i]);
-//     i++;
-// })
 
 loadEvents();
 
