@@ -1,16 +1,43 @@
-function auditDay() {
-    var today = moment().format("dddd, MMMM Do");
-    $("#currentDay").append("<p>").text(today);
-};
-
 var events = JSON.parse(localStorage.getItem("saved events"));
 
 if(!events) {
     events = ["", "", "", "", "", "", "", "", ""];
-}
+};
+
+// set corresponding time attributes for each textarea
+for(var i = 0; i < events.length; i++) {
+    var eventId = JSON.parse($(".row").attr("id")) + i;
+    $("div#" + eventId).find("textarea").attr("time", JSON.stringify(moment().set("hour", (9 + i))));
+};
+
+function auditDay() {
+    var today = moment().format("dddd, MMMM Do");
+    $("#currentDay").append("<p>").text(today);
+
+    if(today != JSON.parse(localStorage.getItem("day"))) {
+        localStorage.setItem("day", JSON.stringify(today));
+        $("textarea").each().text("");
+        events = ["", "", "", "", "", "", "", "", ""];
+        localStorage.setItem("saved events", JSON.stringify(events));
+    }
+};
 
 function auditEvents() {
-    console.log("test");
+    var now = moment().startOf("hour");
+    for(var i = 0; i < events.length; i++) {
+        var eventId = JSON.parse($(".row").attr("id")) + i;
+        var eventTime = JSON.parse($("div#" + eventId).find("textarea").attr("time"));
+        
+        if(now.isAfter(eventTime)) {
+            $("div#" + eventId).find("textarea").addClass("past")
+        }
+        else if(now.isSame(eventTime)) {
+            $("div#" + eventId).find("textarea").addClass("present");
+        }
+        else if(now.isBefore(eventTime)) {
+            $("div#" + eventId).find("textarea").addClass("future");
+        }
+    }
 };
 
 function loadEvents() {
@@ -23,7 +50,7 @@ function loadEvents() {
 };
 
 $("i").on("click", function() {
-    var eventDescription = $(this).parents(".row").find("textarea").val();
+    var eventDescription = $(this).parents(".row").find("textarea").val().trim();
 
     // insert event in corresponding index in events array
     events.splice($(this).parents(".row").attr("id"), 1, eventDescription);
