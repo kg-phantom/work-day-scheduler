@@ -61,6 +61,8 @@ $("i").on("click", function() {
 
 loadEvents();
 
+auditEvents();
+
 // auditDay() every 30mins
 setInterval(auditDay(), (1000 * 60 * 30));
 
