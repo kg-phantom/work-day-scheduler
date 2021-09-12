@@ -7,7 +7,7 @@ if(!events) {
 // set corresponding time attributes for each textarea
 for(var i = 0; i < events.length; i++) {
     var eventId = JSON.parse($(".row").attr("id")) + i;
-    $("div#" + eventId).find("textarea").attr("time", JSON.stringify(moment().set("hour", (9 + i))));
+    $("div#" + eventId).find("textarea").attr("time", JSON.stringify(moment().set("hour", (9 + i)).startOf("hour")));
 };
 
 function auditDay() {
@@ -28,6 +28,7 @@ function auditEvents() {
         var eventId = JSON.parse($(".row").attr("id")) + i;
         var eventTime = JSON.parse($("div#" + eventId).find("textarea").attr("time"));
         
+        // color codes each time block to display if they are in the past, present or future
         if(now.isAfter(eventTime)) {
             $("div#" + eventId).find("textarea").addClass("past")
         }
