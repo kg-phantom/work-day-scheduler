@@ -14,6 +14,7 @@ function auditDay() {
     var today = moment().format("dddd, MMMM Do");
     $("#currentDay").append("<p>").text(today);
 
+    // reset events if it is a new day
     if(today != JSON.parse(localStorage.getItem("day"))) {
         localStorage.setItem("day", JSON.stringify(today));
         $("textarea").each().text("");
@@ -60,6 +61,8 @@ $("i").on("click", function() {
 
 loadEvents();
 
-setInterval(auditDay(), (1000 * 60 * 60));
+// auditDay() every 30mins
+setInterval(auditDay(), (1000 * 60 * 30));
 
-setInterval(auditEvents(), (1000 * 60 * 30));
+// auditEvents() every 15mins
+setInterval(auditEvents(), (1000 * 60 * 15));
